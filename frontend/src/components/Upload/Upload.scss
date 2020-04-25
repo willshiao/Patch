@@ -1,1 +1,119 @@
 @import '../../variables.scss';
+
+.Upload__logo {
+  width: 124px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.Upload__videoBadge {
+  display: block;
+  margin: 0 auto;
+  z-index: 100;
+  margin-bottom: -32px;
+}
+
+.Upload__videoInfoContainer {
+  text-align: center;
+  padding-left: 64px;
+  padding-right: 64px;
+  padding-top: 64px;
+  padding-bottom: 96px;
+  z-index: -100;
+}
+
+.Upload__videoInfoCaption {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.Upload__videoContainer {
+  width: 55%;
+  padding: 16px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: $tailwind-shadow-xl;
+  z-index: 100;
+  margin-top: -96px;
+  background-color: white;
+  height: 50%;
+  word-wrap: break-word;
+}
+
+.Upload__video {
+  text-align: center;
+  border: 2px $primary-color dashed;
+  border-radius: 8px;
+  color: $primary-color;
+  height: 100%;
+  word-wrap: break-word;
+}
+
+.Upload__videoText {
+  font-weight: bold;
+  margin-top: 32px;
+}
+
+.Upload__videoBrowse {
+  margin-bottom: 32px;
+  border-radius: 8px;
+}
+
+.Upload__audioBadge {
+  display: block;
+  margin: 0 auto;
+  z-index: 100;
+  margin-bottom: -32px;
+}
+
+.Upload__audioInfoContainer {
+  text-align: center;
+  padding-left: 64px;
+  padding-right: 64px;
+  background-color: #f0f3f6;
+  padding-top: 64px;
+  padding-bottom: 96px;
+}
+
+.Upload__audioInfoCaption {
+  font-weight: bold;
+  font-size: 24px;
+  color: $secondary-dark-color;
+  margin-bottom: 8px;
+}
+
+.Upload__audioContainer {
+  width: 55%;
+  padding: 16px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: $tailwind-shadow-xl;
+  z-index: 100;
+  margin-top: -96px;
+  background-color: white;
+  height: 50%;
+  word-wrap: break-word;
+}
+
+.Upload__audio {
+  text-align: center;
+  border: 2px $secondary-dark-color dashed;
+  border-radius: 8px;
+  color: $secondary-dark-color;
+  height: 100%;
+}
+
+.Upload__audioText {
+  font-weight: bold;
+  margin-top: 32px;
+}
+
+.Upload__audioBrowse {
+  margin-bottom: 32px;
+  background-color: $secondary-dark-color;
+}
+
+.Upload__button {
+  margin-top: 128px;
+}

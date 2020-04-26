@@ -1,4 +1,4 @@
-export const BASE_URL = "http://ffa09537.ngrok.com";
+export const BASE_URL = "https://patch-api.wls.ai";
 
 export const uploadStyles = {
   backgroundColor: {

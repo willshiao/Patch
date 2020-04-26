@@ -113,8 +113,11 @@
   margin-top: 32px;
 }
 
-.Upload__button {
-  margin-top: 128px;
+.Upload__loading {
+  display: block;
+  margin: 0 auto;
+  width: 4%;
+  margin-top: 64px;
 }
 
 .Upload__drop {
@@ -125,6 +128,8 @@
 .Upload__fileName {
   margin-top: 24px;
   padding: 8px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .Upload__errorImage {
@@ -144,5 +149,12 @@
   padding-left: 64px;
   padding-right: 64px;
   font-family: "Product Sans";
-  font-size: 18px;
+  font-size: 16px;
+}
+
+.Upload__errorList {
+  padding-left: 96px;
+  padding-right: 64px;
+  font-family: "Product Sans";
+  font-size: 16px;
 }

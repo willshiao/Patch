@@ -10,8 +10,9 @@ import { tableColumns } from '../../constants';
 import { mockData } from '../../mocks';
 
 function Result(props) {
-  // const { data } = props.location.state;
-  const data = mockData;
+  console.log("props from result", props);
+  const { data } = props.location.state;
+  // const data = mockData;
   const { videoUrl, affectedRegions } = data;
   const numAffectedRegions = affectedRegions.length;
 

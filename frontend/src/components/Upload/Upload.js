@@ -11,13 +11,14 @@ import videoOne from '../../assets/imgs/upload1_normal.svg';
 import check from '../../assets/imgs/upload1_done.svg';
 import audioOne from '../../assets/imgs/upload2_normal.svg';
 import errorImage from '../../assets/imgs/upload_error.svg';
+import bars from '../../assets/imgs/bars.svg';
 
 function Upload() {
   // States
   const [videoFile, setVideoFile] = useState(null);
   const [audioFile, setAudioFile] = useState(null);
   const [data, setData] = useState(null);
-  const [hasUploadError, setHasUploadError] = useState(false);
+  const [hasUploadError, setHasUploadError] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   // Input tag refs
@@ -50,31 +51,31 @@ function Upload() {
   const handleUpload = e => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     const formData = new FormData();
-
-    console.log("Appending to form", videoFile, audioFile);
-
     formData.append("videoFile", videoFile);
     formData.append("audioFile", audioFile);
 
-    setTimeout(() => setData(mockData), 1000);
-
-    // axios({
-    //   method: 'post',
-    //   url: `${BASE_URL}/blahblah`,
-    //   data: formData,
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // })
-    //   .then(response => {
-    //     console.log("I got a response from backend: ", response);
-    //     setData(mockData);
-    //   })
-    //   .catch(error => {
-    //     setHasUploadError(true);
-    //     console.log("ERRORRRRRRR", error);
-    //   })
+    axios({
+      method: 'post',
+      url: `${BASE_URL}/`,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(response => {
+        console.log("I got a response from backend: ", response);
+        const { data } = response;
+        setData(data);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setHasUploadError(true);
+        setIsLoading(false);
+        console.log("ERRORRRRRRR", error);
+      })
   }
 
   if (data) {
@@ -143,7 +144,7 @@ function Upload() {
                 videoFile ? (
                   <div className="Upload__videoSelected">
                     <p className="Upload__fileName">{videoFile.name}</p>
-                    <Button type="primary" onClick={handleVideoFileCancel} style={{ display: "block", margin: "0 auto", borderRadius: "8px", backgroundColor: "#FF7474" }}>Cancel</Button>
+                    <Button type="primary" disabled={isLoading} onClick={handleVideoFileCancel} style={{ display: "block", margin: "0 auto", border: "none", borderRadius: "8px", backgroundColor: "#FF7474" }}>Cancel</Button>
                   </div>
                 ) : (
                   <div className="Upload__video" {...getVideoRootProps()}>
@@ -181,7 +182,7 @@ function Upload() {
                 audioFile ? (
                   <div>
                     <p className="Upload__fileName">{audioFile.name}</p>
-                    <Button type="primary" onClick={handleAudioFileCancel} style={{ display: "block", margin: "0 auto", outline: "none", borderRadius: "8px", backgroundColor: "#FF7474" }}>Cancel</Button>
+                    <Button type="primary" disabled={isLoading} onClick={handleAudioFileCancel} style={{ display: "block", margin: "0 auto", border: "none", borderRadius: "8px", backgroundColor: "#FF7474" }}>Cancel</Button>
                   </div>
                 ) : (
                   <div className="Upload__audio" {...getAudioRootProps()}>
@@ -204,11 +205,17 @@ function Upload() {
           </div>
         </div>
         {
-          videoFile && audioFile &&
+          videoFile && audioFile && !isLoading &&
             <div className="row justify-content-center">
               <div className="col-2">
-                <Button className="Upload__button" loading={isLoading} type="primary" onClick={handleUpload} style={{ display: "block", margin: "0 auto", marginTop: "128px" }}>Upload</Button>
+                <Button className="Upload__button" type="primary" onClick={handleUpload} style={{ display: "block", margin: "0 auto", marginTop: "64px", borderRadius: "8px" }}>Upload</Button>
               </div>
+            </div>
+        }
+        {
+          isLoading &&
+            <div className="Upload__loadingContainer">
+              <img className="Upload__loading" src={bars} alt="Loading..."/>
             </div>
         }
         <Modal
@@ -221,7 +228,12 @@ function Upload() {
         >
           <img className="Upload__errorImage" src={errorImage} alt=""/>
           <h1 className="Upload__errorTitle">UH-OH!</h1>
-          <p className="Upload__errorMessage">There was an error uploading your files! Please refresh the page and try again!</p>
+          <p className="Upload__errorMessage">There was an error uploading your files! This could be because one of the following reasons:</p>
+          <ul className="Upload__errorList">
+            <li className="Upload__errorListItem">The audio file is shorter than the Zoom recording.</li>
+            <li className="Upload__errorListItem">The audio file is for a different meeting than the video file.</li>
+            <li className="Upload__errorListItem">Our server is currently overloaded and the request timed out (unfortunately, a lot of processing power is required).</li>
+          </ul>
         </Modal>
       </div>
     </div>

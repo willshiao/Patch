@@ -4,6 +4,7 @@ import uuid
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
+from matrixprofile import matrixProfile
 import librosa as lr
 import ffmpeg
 import mass_ts as mts

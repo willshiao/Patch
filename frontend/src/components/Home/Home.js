@@ -3,8 +3,10 @@ import './Home.scss';
 
 function Home() {
   return (
-    <div>
-      <p>Hello, this is home</p>
+    <div className="Home">
+      <div className="container-fluid">
+        {/* do stuff here */}
+      </div>
     </div>
   )
 }

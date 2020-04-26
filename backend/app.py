@@ -41,7 +41,7 @@ def sim(main, query, sr = 22050//4):
 #     batch_sz = sr * 10
     batch_sz = len(main) // 10
 #     idxs, dists = mts.mass2_batch(main, query, batch_size=len(query), top_matches=len(main) // len(query) - 1, n_jobs=16)
-    idxs, dists = mts.mass2_batch(main, query, batch_size=batch_sz, top_matches=len(main) // batch_sz - 1, n_jobs=16)
+    idxs, dists = mts.mass2_batch(main, query, batch_size=batch_sz, top_matches=len(main) // batch_sz - 1, n_jobs=6)
     return idxs[np.argsort(dists)]
 
 def patch(filenames):

@@ -1,1 +1,93 @@
 @import '../../variables.scss';
+
+// .Home__navbar {
+//   margin-bottom: 32px;
+// }
+
+.Home__navbarLogo {
+  width: 15%;
+}
+
+.Home__nav {
+  margin-right: 128px;
+  font-weight: bold;
+  color: black;
+  font-size: 16px;
+}
+
+.Home__navItem {
+  margin-right: 32px;
+}
+
+.Home {
+  font-family: "Product Sans";
+  background-color: white;
+  color: black;
+  overflow: hidden;
+  padding-top: 24px;
+}
+
+.Home__navbarBrand {
+  margin-left: 164px;
+}
+
+.Home__title {
+  margin-bottom: 64px;
+  margin-top: 32px;
+}
+
+.Home__landingText {
+  margin-top: 64px;
+}
+
+.Home__buttonGroup {
+  margin-top: 48px;
+}
+
+.Home__caption {
+  font-weight: bold;
+}
+
+.Home__subcaption {
+  padding-right: 64px;
+}
+
+.Home__landingImage, .Home__aboutImage {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.Home__aboutImage {
+  position: absolute;
+  left: -16px;
+  bottom: -64px;
+}
+
+.Home__about {
+  background-color: #2D8CFF;
+  width: 100%;
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+.Home__aboutTitle, .Home__howTitle {
+  font-weight: bold;
+}
+
+.Home__aboutText {
+  margin-top: 32px;
+}
+
+.Home__how {
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+
+.Home__howTitle {
+  margin-bottom: 32px;
+}
+
+.Home__howIcon {
+  margin-bottom: 16px;
+}

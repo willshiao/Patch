@@ -11,6 +11,46 @@ export const mockData = {
       beginTimestamp: "00:32:41",
       endTimestamp: "00:32:58",
       corruptedPhrase: "today was a good day"
-    }
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day to do a lot of things"
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day"
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day to do a lot of things"
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day"
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day to do a lot of things"
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day to do a lot of things"
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day"
+    },
+    {
+      beginTimestamp: "00:32:41",
+      endTimestamp: "00:32:58",
+      corruptedPhrase: "today was a good day to do a lot of things"
+    },
   ]
 }

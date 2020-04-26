@@ -45,14 +45,14 @@ def sim(main, query, sr = 22050//4):
     return idxs[np.argsort(dists)]
 
 def patch(filenames):
-    vid = filenames[0]
-    aud = filenames[1]
-    extract_audio(os.path.join(app.config['UPLOAD_FOLDER'], vid))
-    x, sr = lr.core.load('out.mp3', sr=22050//4)
-    good_x, good_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=sr)
-    recon_good = clean_track(good_x)
-    recon_x = clean_track(x)
-    idxs = sim(recon_good, recon_x[40*sr:45*sr])
+	vid = filenames[0]
+	aud = filenames[1]
+	extract_audio(os.path.join(app.config['UPLOAD_FOLDER'], vid))
+	x, sr = lr.core.load('out.mp3', sr=22050//4)
+	good_x, good_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=sr)
+	recon_good = clean_track(good_x)
+	recon_x = clean_track(x)
+	idxs = sim(recon_good, recon_x[40*sr:45*sr])
 	offset = idxs[0] - 40*sr
 	x_dur = len(x) / sr
 	clean_x, clean_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=48000)
@@ -65,7 +65,7 @@ def patch(filenames):
 	stream2 = ffmpeg.input('fixed.wav')
 	out = ffmpeg.output(stream.video, stream2.audio, 'fixed.mp4')
 	out.run(overwrite_output=True)
-	
+
 
 
 

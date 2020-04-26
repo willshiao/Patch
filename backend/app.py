@@ -7,6 +7,7 @@ from google.cloud import storage, speech_v1
 from google.cloud.speech_v1 import enums
 import io
 import hashlib
+import json
 
 from matrixprofile import matrixProfile
 import librosa as lr

@@ -147,7 +147,7 @@ def patch(filenames):
         if red.exists(all_hash):
             print('Redis cache hit!')
             bad_ints = json.loads(red.hget(all_hash, 'bad_ints'))
-            output_video_name = red.hget(all_hash, 'vid_name')
+            output_video_name = str(red.hget(all_hash, 'vid_name'), 'utf8')
             text = json.loads(red.hget(all_hash, 'text'))
             return bad_ints, output_video_name, text
         else:

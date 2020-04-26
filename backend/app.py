@@ -3,7 +3,9 @@ from flask import Flask, flash, request, redirect, url_for, render_template
 import uuid
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-from google.cloud import storage
+from google.cloud import storage, speech_v1
+from google.cloud.speech_v1 import enums
+import io
 
 
 from matrixprofile import matrixProfile
@@ -182,7 +184,8 @@ def patch(filenames):
         out_fn = os.path.join('output', str(uuid.uuid4()) + '.wav')
         sf.write(out_fn, piece, clean_sr, 'PCM_16')
         # TODO: Do transcription here
-        text.append('Lorem ipsum')
+        transcription = speech_to_text(out_fn)
+        text.append(transcription)
         os.remove(out_fn)
 
     return bad_ints, output_video_name, text
@@ -201,6 +204,39 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     blob.make_public()
 
     return blob.public_url
+
+def speech_to_text(local_file_path):
+    client = speech_v1.SpeechClient()
+    language_code = "en-US"
+    sample_rate_hertz = 48000
+
+    config = {
+        "language_code": language_code,
+        "sample_rate_hertz": sample_rate_hertz,
+        # "encoding": encoding,
+    }
+    with io.open(local_file_path, "rb") as f:
+        content = f.read()
+    audio = {"content": content}
+    f = sf.SoundFile(local_file_path)
+    aud_len = len(f) / f.samplerate
+    if aud_len < 60:
+        response = client.recognize(config, audio)
+    else:
+        dest_name = str(uuid.uuid4()) + '.wav'
+        upload_blob_uri(bucket_name="patched_video_output", source_file_name=local_file_path, destination_blob_name=dest_name)
+
+        cloud_uri = 'gs://' + 'patched_video_output/' + dest_name
+        print(cloud_uri)
+        audio = {"uri": cloud_uri}
+        operation = client.long_running_recognize(config, audio)
+        response = operation.result()
+    transcripted_text = []
+    for result in response.results:
+        alternative = result.alternatives[0]
+    transcripted_text.append(alternative.transcript)
+    # print(u"Transcript: {}".format(alternative.transcript))
+    return transcripted_text
 
 @app.route('/')
 def upload_form():

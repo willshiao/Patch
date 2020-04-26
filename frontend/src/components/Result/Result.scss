@@ -1,1 +1,51 @@
 @import '../../variables.scss';
+
+.Result {
+  min-height: 100vh;
+  background-color: #F5FAFF;
+}
+
+.Result__logo {
+  width: 124px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.Result__againButton {
+  margin-top: 40px;
+  float: right;
+}
+
+.Result__messageContainer {
+  background-color: white;
+  padding: 32px;
+  padding-bottom: 48px;
+  padding-top: 48px;
+  border-radius: 16px;
+  box-shadow: $tailwind-shadow-xl;
+  text-align: center;
+  position: sticky;
+  top: 2em;
+}
+
+.Result__tableTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 32px;
+}
+
+.Result__title {
+  font-weight: bold;
+}
+
+.Result__image {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.video-react, .video-react-play-progress {
+  font-family: "Product Sans" !important;
+}

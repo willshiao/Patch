@@ -2,7 +2,7 @@
 
 .Upload {
   background: url("../../assets/imgs/upload_bgAlt.png") no-repeat center center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .Upload__logo {
@@ -125,4 +125,24 @@
 .Upload__fileName {
   margin-top: 24px;
   padding: 8px;
+}
+
+.Upload__errorImage {
+  width: 70%;
+  display: block;
+  margin: 0 auto;
+}
+
+.Upload__errorTitle {
+  margin-top: 16px;
+  font-weight: bold;
+  font-family: "Product Sans";
+  text-align: center;
+}
+
+.Upload__errorMessage {
+  padding-left: 64px;
+  padding-right: 64px;
+  font-family: "Product Sans";
+  font-size: 18px;
 }

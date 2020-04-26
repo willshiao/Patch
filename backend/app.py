@@ -233,7 +233,7 @@ def speech_to_text(local_file_path):
     transcripted_text = []
     for result in response.results:
         alternative = result.alternatives[0]
-    transcripted_text.append(alternative.transcript)
+        transcripted_text.append(alternative.transcript)
     # print(u"Transcript: {}".format(alternative.transcript))
     return transcripted_text
 

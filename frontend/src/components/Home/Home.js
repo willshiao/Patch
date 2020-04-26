@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Home.scss';
 import { Button } from 'antd';
 import { GithubOutlined } from '@ant-design/icons';
+import { Link as RouterLink } from 'react-router-dom';
 import { Link, Element } from 'react-scroll';
 import {
   Collapse,
@@ -57,8 +58,10 @@ function Home() {
                 <h1 className="Home__caption">The quick fix for your choppy <em>Zoom</em> audio.</h1>
                 <p className="Home__subcaption">Posting a video with audio defects? We'll make uploading it the hardest part.</p>
                 <div className="Home__buttonGroup">
-                  <Button type="primary" style={{ marginRight: "16px", borderRadius: "8px" }}>Get Patchin'</Button>
-                  <Button ghost icon={<GithubOutlined style={{ marginTop: "-10px"}} />} style={{ borderRadius: "8px", color: "#000", borderColor: "#000", borderWidth: "2px" }}>View on GitHub</Button>
+                  <RouterLink to="/upload">
+                    <Button type="primary" style={{ marginRight: "16px", borderRadius: "8px" }}>Get Patchin'</Button>
+                  </RouterLink>
+                  <Button ghost style={{ borderRadius: "8px", color: "#000", borderColor: "#000", borderWidth: "2px" }}>View on GitHub</Button>
                 </div>
               </div>
             </div>
@@ -77,7 +80,9 @@ function Home() {
                 <div className="Home__aboutText">
                   <img className="Home__line" src={whiteLine} alt="break"/>
                   <h1 className="Home__aboutTitle">About</h1>
-                  <p className="Home__aboutDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                  <p className="Home__aboutDescription">
+                  Patch takes advantage of the fact that the full quality version of the user's voice passes though the computer first, before it is transmitted to Zoom. Any errors or connection issues typically occur during transmission. Patch allows an user to upload their Zoom meeting recording and an audio recording of their own microphone that they took locally. It then analyzes the audio of the meeting recording and attempts to find sections that are corrupted. It then automatically synchronizes the two tracks, replaces the corrupted portions of the meeting recording, and reconstructs the video using the repaired audio.
+                  </p>
                 </div>
               </div>
             </div>
@@ -94,7 +99,7 @@ function Home() {
             <div className="row justify-content-center">
               <div className="col-2">
                 <img className="Home__howIcon" src={sound} alt="sound"/>
-                <p className="Home__howDescription">Before you start recording your Zoom meeting, make sure to begin recording your own voice. This could be done through an external application on your phone, computer, etc. As long as you provide an [list acceptable file types], you’re good to go!</p>
+                <p className="Home__howDescription">Before you start recording your Zoom meeting, make sure to begin recording your own voice. This could be done through an external application on your phone, computer, etc. As long as you provide an audio and video file, you’re good to go!</p>
               </div>
               <div className="col-2">
                 <img className="Home__howIcon" src={upload} alt="upload"/>

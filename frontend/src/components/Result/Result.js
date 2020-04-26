@@ -14,7 +14,8 @@ function Result(props) {
   const { data } = props.location.state;
   // const data = mockData;
   const { videoUrl, affectedRegions } = data;
-  const numAffectedRegions = affectedRegions.length;
+  const filteredAffectedRegions = affectedRegions.filter(({ corruptedPhrase }) => corruptedPhrase.length > 0);
+  const numAffectedRegions = filteredAffectedRegions.length;
 
   if (!data) {
     return <Redirect push to={{ pathname: '/' }}/>
@@ -25,7 +26,9 @@ function Result(props) {
       <div className="container-fluid">
         <div className="row justify-content-center">
           <div className="col-5">
-            <img className="Result__logo" src={logo} alt="Patch"/>
+            <Link to="/">
+              <img className="Result__logo" src={logo} alt="Patch"/>
+            </Link>
           </div>
           <div className="col-4">
             <div className="Result__againContainer">
@@ -47,7 +50,7 @@ function Result(props) {
             <Table
               className="Result__table"
               columns={tableColumns}
-              dataSource={affectedRegions}
+              dataSource={filteredAffectedRegions}
               pagination={false}
             />
           </div>
@@ -56,7 +59,9 @@ function Result(props) {
               <h3 className="Result__title">Patch Successful!</h3>
               <p className="Result__subtitle">We were able to patch-up your video. Check it out and download it once you're ready!</p>
               <img className="Result__image" src={successImage} alt=""/>
-              <Button className="Result__download" type="primary" icon={<DownloadOutlined />} style={{ display: "block", margin: "0 auto", borderRadius: "8px" }}>Download video</Button>
+              <a href={videoUrl} download>
+                <Button className="Result__download" type="primary" style={{ display: "block", margin: "0 auto", borderRadius: "8px" }}>Download video</Button>
+              </a>
             </div>
           </div>
         </div>

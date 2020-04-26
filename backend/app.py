@@ -46,6 +46,61 @@ def sim(main, query, sr=22050//4):
     idxs, dists = mts.mass2_batch(main, query, batch_size=batch_sz, top_matches=len(main) // batch_sz - 1, n_jobs=6)
     return idxs[np.argsort(dists)]
 
+# Finds bad parts of audio
+def find_bad(seg, sr):
+    prof = matrixProfile.scrimp_plus_plus(y, sr * 3, runtime=30)
+    mat_prof = prof[0]
+    prof_mean = np.mean(mat_prof[~np.isnan(mat_prof)])
+    is_under = (mat_prof < prof_mean)
+    out = []
+    pers = []
+    wind_sz = sr
+    for i in range(len(is_under) - wind_sz):
+        sec = is_under[i:i+wind_sz]
+        cnt = sec.sum()
+        percent_bad = cnt / wind_sz
+        pers.append(percent_bad)
+        out.append((cnt, i))
+
+    per_mean = np.mean(pers)
+    per_dev = np.std(pers)
+    out_filt = [out[i] for i, per in enumerate(pers) if per > per_mean + 0.5 * per_dev]
+
+    out_filt.sort(reverse=True)
+    secs = []
+    seen = set()
+    for cnt, time in out_filt:
+        rounded = int(np.round(time / sr))
+        if rounded in seen:
+            continue
+        else:
+            seen.add(rounded)
+            secs.append(rounded)
+    return secs
+
+# Converts bad parts of audio into intervals
+def into_intervals(bad_secs):
+    secs_sorted = sorted(bad_secs)
+    int_start = secs_sorted[0]
+    last_int = secs_sorted[0]
+    ints = []
+    for i in range(1, len(secs_sorted)):
+        curr = secs_sorted[i]
+        if curr - last_int > 1:
+            ints.append((int_start, last_int))
+            int_start = curr
+        last_int = curr
+    ints.append((int_start, last_int))
+    return ints
+
+# Patches selected portions of the audio
+def patch_audio(original, good, offset_dur, ints, new_sr):
+    offset = int(np.round(offset_dur * new_sr))
+    for st, end in ints:
+        patch_len = (end - st) * new_sr
+        original[st * new_sr:end * new_sr] = good[offset + st * new_sr:offset + end * new_sr]
+    return original
+
 def patch(filenames):
     vid = filenames[0]
     aud = filenames[1]
@@ -60,6 +115,7 @@ def patch(filenames):
 
     # Perform MASS
     # TODO: randomize start and end indices and do majority voting
+    print('Performing MASS')
     OFF_START = 40
     OFF_END = 45
     idxs = sim(recon_good, recon_x[OFF_START*sr:OFF_END*sr])
@@ -67,24 +123,39 @@ def patch(filenames):
     offset_dur = offset / sr
     x_dur = len(x) / sr
 
-    # Load in a high quality version
+    # Find bad portions
+    print('Finding bad portions')
+    bad_pieces = find_bad(x, sr)
+    bad_ints = into_intervals(bad_pieces)
+
+    # Load in high quality versions
     clean_x, clean_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=48000)
-    start_clean = int(np.round(offset / sr * clean_sr))
-    end_clean = start_clean + int(np.round(x_dur * clean_sr))
-    clean_trimmed = clean_x[start_clean:end_clean + 1]
+    clean_orig_x, clean_orig_sr = lr.core.load(os.path.join('output', extracted_name), sr=48000)
+
+    # start_clean = int(np.round(offset / sr * clean_sr))
+    # end_clean = start_clean + int(np.round(x_dur * clean_sr))
+    # clean_trimmed = clean_x[start_clean:end_clean + 1]
+
+    # Patch original audio
+    patch_audio(clean_orig_x, clean_x, offset_dur, bad_ints, clean_sr)
 
     # Save cleaned file as a wav
-    trimmed_name = str(uuid.uuid4()) + '.wav'
-    sf.write('output/' + trimmed_name, clean_trimmed, clean_sr, 'PCM_16')
+    # trimmed_name = str(uuid.uuid4()) + '.wav'
+    # sf.write('output/' + trimmed_name, clean_trimmed, clean_sr, 'PCM_16')
+
+    # Save patched file
+    patched_name = str(uuid.uuid4()) + '.wav'
+    sf.write(os.path.join('output', patched_name), clean_orig_x, clean_sr, 'PCM_16')
 
     # Patch video
     vfile = os.path.join(app.config['UPLOAD_FOLDER'], vid)
     stream = ffmpeg.input(vfile)
-    stream2 = ffmpeg.input('output/' + trimmed_name)
+    # stream2 = ffmpeg.input('output/' + trimmed_name)
+    stream2 = ffmpeg.input(os.path.join('output/', patched_name))
     output_video_name = str(uuid.uuid4()) + '.mp4'
     out = ffmpeg.output(stream.video, stream2.audio, 'output/' + output_video_name)
     out.run(overwrite_output=True)
-    print("done patching")
+    print(f"Done patching ${output_video_name}")
 
 
 

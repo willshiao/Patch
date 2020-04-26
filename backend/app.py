@@ -25,9 +25,11 @@ def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def extract_audio(vfile):
-    stream = ffmpeg.input(vfile)
-    out = ffmpeg.output(stream.audio, 'out.mp3')
-    out.run(overwrite_output=True)
+	stream = ffmpeg.input(vfile)
+	audioname = str(uuid.uuid4()) + '.mp3'
+	out = ffmpeg.output(stream.audio, 'output/' + audioname)
+	out.run(overwrite_output=True)
+	return audioname
 
 def clean_track(track, samp = 22050//4):
     ff_track = fft(track)
@@ -47,8 +49,9 @@ def sim(main, query, sr = 22050//4):
 def patch(filenames):
 	vid = filenames[0]
 	aud = filenames[1]
-	extract_audio(os.path.join(app.config['UPLOAD_FOLDER'], vid))
-	x, sr = lr.core.load('out.mp3', sr=22050//4)
+	extracted_name = extract_audio(os.path.join(app.config['UPLOAD_FOLDER'], vid))
+
+	x, sr = lr.core.load('output/' + extracted_name, sr=22050//4)
 	good_x, good_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=sr)
 	recon_good = clean_track(good_x)
 	recon_x = clean_track(x)
@@ -59,11 +62,14 @@ def patch(filenames):
 	start_clean = int(np.round(offset / sr * clean_sr))
 	end_clean = start_clean + int(np.round(x_dur * clean_sr))
 	clean_trimmed = clean_x[start_clean:end_clean + 1]
-	sf.write('fixed.wav', clean_trimmed, clean_sr, 'PCM_16')
+	trimmed_name = str(uuid.uuid4()) + '.wav'
+	sf.write('output/' + trimmed_name, clean_trimmed, clean_sr, 'PCM_16')
+
 	vfile = os.path.join(app.config['UPLOAD_FOLDER'], vid)
 	stream = ffmpeg.input(vfile)
-	stream2 = ffmpeg.input('fixed.wav')
-	out = ffmpeg.output(stream.video, stream2.audio, 'fixed.mp4')
+	stream2 = ffmpeg.input('output/' + trimmed_name)
+	output_video_name = str(uuid.uuid4()) + '.mp4'
+	out = ffmpeg.output(stream.video, stream2.audio, 'output/' + output_video_name)
 	out.run(overwrite_output=True)
 	print("done patching")
 

@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from google.cloud import storage, speech_v1
 from google.cloud.speech_v1 import enums
 import io
-
+import hashlib
 
 from matrixprofile import matrixProfile
 import librosa as lr
@@ -16,7 +16,9 @@ from scipy.fft import fft, ifft
 import numpy as np
 import soundfile as sf
 from pydub import AudioSegment
+import redis
 
+USE_REDIS = True
 UPLOAD_FOLDER = 'uploads'
 
 app = Flask(__name__)
@@ -25,6 +27,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "secret key"
 
 ALLOWED_EXTENSIONS = set(['mp4', 'm4a', 'mp3'])
+
+if USE_REDIS:
+    # Yes, I know this is bad practice
+    # But, even if you have the IP, access is limited
+    # And it's 4:20 AM so I'm tired
+    red = redis.Redis(host='10.163.88.147', port=6379)
 
 def to_timestamp(sec):
     hours = str(sec // 3600).rjust(2, '0')
@@ -115,10 +123,36 @@ def patch_audio(original, good, offset_dur, ints, new_sr):
         original[st * new_sr:end * new_sr] = good[offset + st * new_sr:offset + end * new_sr]
     return original
 
+def hash_file(file_path):
+    hash = hashlib.sha256()
+    with open(file_path, 'rb') as f:
+        buf = f.read(65536)
+        while len(buf) > 0:
+            hash.update(buf)
+            buf = f.read(65536)
+    return hash.hexdigest()
+
+
 def patch(filenames):
     vid = filenames[0]
     aud = filenames[1]
-    extracted_name = extract_audio(os.path.join(app.config['UPLOAD_FOLDER'], vid))
+    vid_path = os.path.join(app.config['UPLOAD_FOLDER'], vid)
+    aud_path = os.path.join(app.config['UPLOAD_FOLDER'], aud)
+
+    if USE_REDIS:
+        aud_hash = hash_file(aud_path)
+        vid_hash = hash_file(vid_path)
+        all_hash = aud_hash + vid_hash
+        if red.exists(all_hash):
+            print('Redis cache hit!')
+            bad_ints = json.loads(red.hget(all_hash, 'bad_ints'))
+            output_video_name = red.hget(all_hash, 'vid_name')
+            text = json.loads(red.hget(all_hash, 'text'))
+            return bad_ints, output_video_name, text
+        else:
+            print('Redis cache miss :(')
+
+    extracted_name = extract_audio(vid_path)
     # Read at low sample rate
     x, sr = lr.core.load('output/' + extracted_name, sr=22050//4)
     good_x, good_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=sr)
@@ -168,8 +202,7 @@ def patch(filenames):
     sf.write(os.path.join('output', patched_name), clean_orig_x, clean_sr, 'PCM_16')
 
     # Patch video
-    vfile = os.path.join(app.config['UPLOAD_FOLDER'], vid)
-    stream = ffmpeg.input(vfile)
+    stream = ffmpeg.input(vid_path)
     # stream2 = ffmpeg.input('output/' + trimmed_name)
     stream2 = ffmpeg.input(os.path.join('output/', patched_name))
     output_video_name = str(uuid.uuid4()) + '.mp4'
@@ -187,6 +220,11 @@ def patch(filenames):
         transcription = speech_to_text(out_fn)
         text.append(transcription)
         os.remove(out_fn)
+
+    if USE_REDIS:
+        red.hset(all_hash, 'bad_ints', json.dumps(bad_ints))
+        red.hset(all_hash, 'vid_name', output_video_name)
+        red.hset(all_hash, 'text', json.dumps(text))
 
     return bad_ints, output_video_name, text
 

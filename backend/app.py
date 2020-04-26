@@ -53,6 +53,20 @@ def patch(filenames):
     recon_good = clean_track(good_x)
     recon_x = clean_track(x)
     idxs = sim(recon_good, recon_x[40*sr:45*sr])
+	offset = idxs[0] - 40*sr
+	x_dur = len(x) / sr
+	clean_x, clean_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=48000)
+	start_clean = int(np.round(offset / sr * clean_sr))
+	end_clean = start_clean + int(np.round(x_dur * clean_sr))
+	clean_trimmed = clean_x[start_clean:end_clean + 1]
+	sf.write('fixed.wav', clean_trimmed, clean_sr, 'PCM_16')
+	vfile = 'samples/v2/zoom_0.mp4'
+	stream = ffmpeg.input(vfile)
+	stream2 = ffmpeg.input('fixed.wav')
+	out = ffmpeg.output(stream.video, stream2.audio, 'fixed.mp4')
+	out.run(overwrite_output=True)
+	
+
 
 
 

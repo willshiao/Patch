@@ -65,6 +65,7 @@ def patch(filenames):
 	stream2 = ffmpeg.input('fixed.wav')
 	out = ffmpeg.output(stream.video, stream2.audio, 'fixed.mp4')
 	out.run(overwrite_output=True)
+	print("done patching")
 
 
 

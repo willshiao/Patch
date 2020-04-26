@@ -3,23 +3,19 @@ import './Result.scss';
 import { Redirect, Link } from 'react-router-dom';
 import { Button, Table } from 'antd';
 import { Player, BigPlayButton } from 'video-react';
-import { DownloadOutlined } from '@ant-design/icons';
 import logo from '../../assets/imgs/patch_logo.svg';
 import successImage from '../../assets/imgs/result1.svg';
 import { tableColumns } from '../../constants';
-import { mockData } from '../../mocks';
 
 function Result(props) {
-  console.log("props from result", props);
+  if (!props.location.state) {
+    return <Redirect push to={{ pathname: '/' }}/>
+  }
+
   const { data } = props.location.state;
-  // const data = mockData;
   const { videoUrl, affectedRegions } = data;
   const filteredAffectedRegions = affectedRegions.filter(({ corruptedPhrase }) => corruptedPhrase.length > 0);
   const numAffectedRegions = filteredAffectedRegions.length;
-
-  if (!data) {
-    return <Redirect push to={{ pathname: '/' }}/>
-  }
 
   return (
     <div className="Result">

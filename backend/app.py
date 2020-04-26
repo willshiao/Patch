@@ -174,22 +174,33 @@ def patch(filenames):
     out = ffmpeg.output(stream.video, stream2.audio, 'output/' + output_video_name)
     out.run(overwrite_output=True)
     print(f"Done patching {output_video_name}")
-    return bad_ints, output_video_name
+
+    text = []
+    # Get text transcription of intervals
+    for st, end in bad_ints:
+        piece = clean_x[offset + st * clean_sr:offset + end * clean_sr]
+        out_fn = os.path.join('output', str(uuid.uuid4()) + '.wav')
+        sf.write(out_fn, piece, clean_sr, 'PCM_16')
+        # TODO: Do transcription here
+        text.append('Lorem ipsum')
+        os.remove(out_fn)
+
+    return bad_ints, output_video_name, text
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
-	"""Uploads a file to the bucket."""
-	# bucket_name = "your-bucket-name"
-	# source_file_name = "local/path/to/file"
-	# destination_blob_name = "storage-object-name"
+    """Uploads a file to the bucket."""
+    # bucket_name = "your-bucket-name"
+    # source_file_name = "local/path/to/file"
+    # destination_blob_name = "storage-object-name"
 
-	storage_client = storage.Client()
-	bucket = storage_client.bucket(bucket_name)
-	blob = bucket.blob(destination_blob_name)
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
 
-	blob.upload_from_filename(source_file_name)
-	blob.make_public()
+    blob.upload_from_filename(source_file_name)
+    blob.make_public()
 
-	return blob.public_url
+    return blob.public_url
 
 @app.route('/')
 def upload_form():
@@ -197,36 +208,39 @@ def upload_form():
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-	if request.method == 'POST':
+    if request.method == 'POST':
         # check if the post request has the files part
-		if 'videoFile' not in request.files or 'audioFile' not in request.files:
-			flash('No file part')
-			return redirect(request.url)
-		file1 = request.files['videoFile']
-		file2 = request.files['audioFile']
-		files = [file1, file2]
-		filenames = []
-		for file in files:
-			if file and allowed_file(file.filename):
-				filesplit = secure_filename(file.filename).split(".")
-				filename = str(uuid.uuid4()) + '.' + filesplit[1]
-				filenames.append(filename)
-				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-		bad_ints, output_video_name = patch(filenames)
-		flash('File(s) successfully uploaded')
-		affectedRegions = []
-		for st, end in bad_ints:
-			affectedRegions.append({
-				'beginTimestamp': to_timestamp(st),
-				'endTimestamp': to_timestamp(end),
-				'corruptedPhrase': 'Lorem ipsum dolor sit amet'
-			})
-		dest_name = str(uuid.uuid4()) + '.mp4'
-		public_url = upload_blob(bucket_name="patched_video_output", source_file_name=os.path.join('output', output_video_name), destination_blob_name=dest_name)
-		return {
-			'videoUrl': public_url,
-			'affectedRegions': affectedRegions
-		}
+        if 'videoFile' not in request.files or 'audioFile' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file1 = request.files['videoFile']
+        file2 = request.files['audioFile']
+        files = [file1, file2]
+        filenames = []
+        for file in files:
+            if file and allowed_file(file.filename):
+                filesplit = secure_filename(file.filename).split(".")
+                filename = str(uuid.uuid4()) + '.' + filesplit[1]
+                filenames.append(filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        bad_ints, output_video_name, corr_text = patch(filenames)
+        flash('File(s) successfully uploaded')
+
+        affectedRegions = []
+        for i, (st, end) in enumerate(bad_ints):
+            affectedRegions.append({
+                'beginTimestamp': to_timestamp(st),
+                'endTimestamp': to_timestamp(end),
+                'corruptedPhrase': corr_text[i]
+                # 'corruptedPhrase': 'Lorem ipsum dolor sit amet'
+            })
+
+        dest_name = str(uuid.uuid4()) + '.mp4'
+        public_url = upload_blob(bucket_name="patched_video_output", source_file_name=os.path.join('output', output_video_name), destination_blob_name=dest_name)
+        return {
+            'videoUrl': public_url,
+            'affectedRegions': affectedRegions
+        }
 
 
 if __name__ == "__main__":

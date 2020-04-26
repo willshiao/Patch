@@ -224,8 +224,7 @@ def speech_to_text(local_file_path):
         response = client.recognize(config, audio)
     else:
         dest_name = str(uuid.uuid4()) + '.wav'
-        upload_blob_uri(bucket_name="patched_video_output", source_file_name=local_file_path, destination_blob_name=dest_name)
-
+        upload_blob(bucket_name="patched_video_output", source_file_name=local_file_path, destination_blob_name=dest_name)
         cloud_uri = 'gs://' + 'patched_video_output/' + dest_name
         print(cloud_uri)
         audio = {"uri": cloud_uri}

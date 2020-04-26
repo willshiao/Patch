@@ -2,9 +2,10 @@ import React, { useState, useCallback, useRef } from 'react';
 import './Upload.scss';
 import { useDropzone } from 'react-dropzone';
 import { Button, Modal } from 'antd';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
 import { mockData } from '../../mocks';
+import Fade from 'react-reveal/Fade';
 import axios from 'axios';
 import logo from '../../assets/imgs/patch_logo.svg';
 import videoOne from '../../assets/imgs/upload1_normal.svg';
@@ -18,7 +19,7 @@ function Upload() {
   const [videoFile, setVideoFile] = useState(null);
   const [audioFile, setAudioFile] = useState(null);
   const [data, setData] = useState(null);
-  const [hasUploadError, setHasUploadError] = useState(true);
+  const [hasUploadError, setHasUploadError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // Input tag refs
@@ -32,7 +33,6 @@ function Upload() {
   }, []);
   const {
     getRootProps: getVideoRootProps,
-    getInputProps: getVideoInputProps,
     isDragActive: isVideoDragActive
   } = useDropzone({ onDrop: onVideoDrop });
 
@@ -43,7 +43,6 @@ function Upload() {
   }, []);
   const {
     getRootProps: getAudioRootProps,
-    getInputProps: getAudioInputProps,
     isDragActive: isAudioDragActive
   } = useDropzone({ onDrop: onAudioDrop });
 
@@ -122,7 +121,9 @@ function Upload() {
       <div className="container-fluid">
         <div className="row justify-content-center">
           <div className="col-5">
-            <img className="Upload__logo" src={logo} alt="Patch"/>
+            <Link to="/">
+              <img className="Upload__logo" src={logo} alt="Patch"/>
+            </Link>
           </div>
           <div className="col-5"></div>
         </div>
@@ -228,7 +229,7 @@ function Upload() {
         >
           <img className="Upload__errorImage" src={errorImage} alt=""/>
           <h1 className="Upload__errorTitle">UH-OH!</h1>
-          <p className="Upload__errorMessage">There was an error uploading your files! This could be because one of the following reasons:</p>
+          <p className="Upload__errorMessage">There was an error uploading your files! This could be because of one of the following reasons:</p>
           <ul className="Upload__errorList">
             <li className="Upload__errorListItem">The audio file is shorter than the Zoom recording.</li>
             <li className="Upload__errorListItem">The audio file is for a different meeting than the video file.</li>

@@ -49,7 +49,7 @@ def sim(main, query, sr=22050//4):
 
 # Finds bad parts of audio
 def find_bad(seg, sr):
-    prof = matrixProfile.scrimp_plus_plus(y, sr * 3, runtime=30)
+    prof = matrixProfile.scrimp_plus_plus(seg, sr * 3, runtime=30)
     mat_prof = prof[0]
     prof_mean = np.mean(mat_prof[~np.isnan(mat_prof)])
     is_under = (mat_prof < prof_mean)

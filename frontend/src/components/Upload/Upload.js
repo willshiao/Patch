@@ -38,11 +38,6 @@ function Upload() {
     }
 
     const videoFile = acceptedFiles[0];
-    if (!videoFileTypes.includes(videoFile.type)) {
-      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
-      return;
-    }
-
     setVideoFile(videoFile);
   }, []);
   const {
@@ -58,11 +53,6 @@ function Upload() {
     }
     
     const audioFile = acceptedFiles[0];
-    if (!audioFileTypes.includes(audioFile.type)) {
-      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
-      return;
-    }
-
     setAudioFile(audioFile);
   }, []);
   const {
@@ -132,11 +122,6 @@ function Upload() {
     }
 
     const videoFile = files[0];
-    if (!videoFileTypes.includes(videoFile.type)) {
-      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
-      return;
-    }
-
     setVideoFile(videoFile);
   }
 
@@ -152,11 +137,6 @@ function Upload() {
     }
 
     const audioFile = e.target.files[0];
-    if (!audioFileTypes.includes(audioFile.type)) {
-      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
-      return;
-    }
-
     setAudioFile(audioFile);
   }
 
@@ -277,6 +257,7 @@ function Upload() {
           <h1 className="Upload__errorTitle">UH-OH!</h1>
           <p className="Upload__errorMessage">There was an error uploading your files! This could be because of one of the following reasons:</p>
           <ul className="Upload__errorList">
+            <li className="Upload__errorListItem">The video/audio file is not valid.</li>
             <li className="Upload__errorListItem">The audio file is shorter than the Zoom recording.</li>
             <li className="Upload__errorListItem">The audio file is for a different meeting than the video file.</li>
             <li className="Upload__errorListItem">Our server is currently overloaded and the request timed out (unfortunately, a lot of processing power is required).</li>

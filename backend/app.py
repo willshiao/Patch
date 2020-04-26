@@ -60,7 +60,7 @@ def patch(filenames):
 	end_clean = start_clean + int(np.round(x_dur * clean_sr))
 	clean_trimmed = clean_x[start_clean:end_clean + 1]
 	sf.write('fixed.wav', clean_trimmed, clean_sr, 'PCM_16')
-	vfile = 'samples/v2/zoom_0.mp4'
+	vfile = os.path.join(app.config['UPLOAD_FOLDER'], vid)
 	stream = ffmpeg.input(vfile)
 	stream2 = ffmpeg.input('fixed.wav')
 	out = ffmpeg.output(stream.video, stream2.audio, 'fixed.mp4')

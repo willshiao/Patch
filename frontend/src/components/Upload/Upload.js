@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import './Upload.scss';
 import { useDropzone } from 'react-dropzone';
-import { Button, Upload as AntUpload } from 'antd';
+import { Button, Modal } from 'antd';
 import { Redirect } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
 import { mockData } from '../../mocks';
@@ -10,14 +10,17 @@ import logo from '../../assets/imgs/patch_logo.svg';
 import videoOne from '../../assets/imgs/upload1_normal.svg';
 import check from '../../assets/imgs/upload1_done.svg';
 import audioOne from '../../assets/imgs/upload2_normal.svg';
+import errorImage from '../../assets/imgs/upload_error.svg';
 
 function Upload() {
   // States
   const [videoFile, setVideoFile] = useState(null);
   const [audioFile, setAudioFile] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
+  const [hasUploadError, setHasUploadError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Input tag refs
   const inputVideoFile = useRef(null);
   const inputAudioFile = useRef(null);
 
@@ -54,21 +57,24 @@ function Upload() {
     formData.append("videoFile", videoFile);
     formData.append("audioFile", audioFile);
 
-    axios({
-      method: 'post',
-      url: `${BASE_URL}/`,
-      data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-      .then(response => {
-        console.log("I got a response from backend: ", response);
-        setData(mockData);
-      })
-      .catch(error => {
-        console.log("ERRORRRRRRR", error);
-      })
+    setTimeout(() => setData(mockData), 1000);
+
+    // axios({
+    //   method: 'post',
+    //   url: `${BASE_URL}/blahblah`,
+    //   data: formData,
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // })
+    //   .then(response => {
+    //     console.log("I got a response from backend: ", response);
+    //     setData(mockData);
+    //   })
+    //   .catch(error => {
+    //     setHasUploadError(true);
+    //     console.log("ERRORRRRRRR", error);
+    //   })
   }
 
   if (data) {
@@ -107,6 +113,8 @@ function Upload() {
     const audioFile = e.target.files[0];
     setAudioFile(audioFile);
   }
+
+  const closeModal = () => setHasUploadError(false);
 
   return (
     <div className="Upload">
@@ -203,6 +211,18 @@ function Upload() {
               </div>
             </div>
         }
+        <Modal
+          visible={hasUploadError}
+          onCancel={closeModal}
+          width={640}
+          footer={null}
+          centered
+          className="Upload__modal"
+        >
+          <img className="Upload__errorImage" src={errorImage} alt=""/>
+          <h1 className="Upload__errorTitle">UH-OH!</h1>
+          <p className="Upload__errorMessage">There was an error uploading your files! Please refresh the page and try again!</p>
+        </Modal>
       </div>
     </div>
   )

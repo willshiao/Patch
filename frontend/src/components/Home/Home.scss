@@ -1,1 +1,45 @@
 @import '../../variables.scss';
+.Home{
+    font-family: "Product Sans";
+    background-color: white;
+    color: black;
+}
+.TopNavBar{
+    padding: 32px;
+    font-size: 20px;
+    color: black;
+}
+
+.TopNavBar ul{
+    padding: 10px;
+}
+
+.row{
+    padding-top:5%;
+}
+
+.col-5{
+    margin-top: 5%;
+
+}
+.col-5 h1{
+    margin-left: 35%;
+    font-size: 40px;
+    line-height: 60px;
+}
+
+.col-5 hr{
+    width: 10%;
+    margin-left: 35%;
+    background-color:#2D8CFF;
+    height: 8px;
+}
+
+.col-5 p{
+    margin-left: 35%;
+    font-size: 20px;
+}
+
+#Image img{
+    margin-left: 15%;
+}

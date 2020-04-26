@@ -98,7 +98,8 @@ def into_intervals(bad_secs):
 def patch_audio(original, good, offset_dur, ints, new_sr):
     offset = int(np.round(offset_dur * new_sr))
     for st, end in ints:
-        patch_len = (end - st) * new_sr
+        print('Patching:', (st, end))
+        # patch_len = (end - st) * new_sr
         original[st * new_sr:end * new_sr] = good[offset + st * new_sr:offset + end * new_sr]
     return original
 
@@ -156,7 +157,7 @@ def patch(filenames):
     output_video_name = str(uuid.uuid4()) + '.mp4'
     out = ffmpeg.output(stream.video, stream2.audio, 'output/' + output_video_name)
     out.run(overwrite_output=True)
-    print(f"Done patching ${output_video_name}")
+    print(f"Done patching {output_video_name}")
 
 
 

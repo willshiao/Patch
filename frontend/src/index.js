@@ -2,13 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { ToastProvider } from 'react-toast-notifications';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
 import 'video-react/dist/video-react.css';
 
 ReactDOM.render(
-  <App />,
+  <ToastProvider placement="top-center">
+    <App />
+  </ToastProvider>,
   document.getElementById('root')
 );
 

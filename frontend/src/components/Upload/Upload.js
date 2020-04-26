@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useRef } from 'react';
 import './Upload.scss';
 import { useDropzone } from 'react-dropzone';
+import { useToasts } from 'react-toast-notifications';
 import { Button, Modal } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
-import { BASE_URL } from '../../constants';
+import { BASE_URL, NUM_FILES_ERROR, INVALID_FILE_ERROR, videoFileTypes, audioFileTypes } from '../../constants';
 import { mockData } from '../../mocks';
 import Fade from 'react-reveal/Fade';
 import axios from 'axios';
@@ -26,9 +27,22 @@ function Upload() {
   const inputVideoFile = useRef(null);
   const inputAudioFile = useRef(null);
 
+  // Toast notification
+  const { addToast } = useToasts();
+
   // Video drag 'n' drop
   const onVideoDrop = useCallback(acceptedFiles => {
-    const videoFile = acceptedFiles[0]
+    if (acceptedFiles.length > 1) {
+      addToast(NUM_FILES_ERROR, { appearance: 'error' });
+      return;
+    }
+
+    const videoFile = acceptedFiles[0];
+    if (!videoFileTypes.includes(videoFile.type)) {
+      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
+      return;
+    }
+
     setVideoFile(videoFile);
   }, []);
   const {
@@ -38,7 +52,17 @@ function Upload() {
 
   // Audio drag 'n' drop
   const onAudioDrop = useCallback(acceptedFiles => {
-    const audioFile = acceptedFiles[0]
+    if (acceptedFiles.length > 1) {
+      addToast(NUM_FILES_ERROR, { appearance: 'error' });
+      return;
+    }
+    
+    const audioFile = acceptedFiles[0];
+    if (!audioFileTypes.includes(audioFile.type)) {
+      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
+      return;
+    }
+
     setAudioFile(audioFile);
   }, []);
   const {

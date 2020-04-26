@@ -1,13 +1,13 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, render_template
+import hashlib
 import uuid
+import json
+import io
+from flask import Flask, flash, request, redirect, render_template
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from google.cloud import storage, speech_v1
 from google.cloud.speech_v1 import enums
-import io
-import hashlib
-import json
 
 from matrixprofile import matrixProfile
 import librosa as lr
@@ -16,7 +16,6 @@ import mass_ts as mts
 from scipy.fft import fft, ifft
 import numpy as np
 import soundfile as sf
-from pydub import AudioSegment
 import redis
 
 USE_REDIS = True
@@ -125,13 +124,13 @@ def patch_audio(original, good, offset_dur, ints, new_sr):
     return original
 
 def hash_file(file_path):
-    hash = hashlib.sha256()
+    cur_hash = hashlib.sha256()
     with open(file_path, 'rb') as f:
         buf = f.read(65536)
         while len(buf) > 0:
-            hash.update(buf)
+            cur_hash.update(buf)
             buf = f.read(65536)
-    return hash.hexdigest()
+    return cur_hash.hexdigest()
 
 
 def patch(filenames):
@@ -150,8 +149,7 @@ def patch(filenames):
             output_video_name = str(red.hget(all_hash, 'vid_name'), 'utf8')
             text = json.loads(red.hget(all_hash, 'text'))
             return bad_ints, output_video_name, text
-        else:
-            print('Redis cache miss :(')
+        print('Redis cache miss :(')
 
     extracted_name = extract_audio(vid_path)
     # Read at low sample rate
@@ -172,7 +170,7 @@ def patch(filenames):
         idxs = sim(recon_good, recon_x[off_start*sr:off_end*sr])
         offset = idxs[0] - off_start*sr
         offset_dur = offset / sr
-        x_dur = len(x) / sr
+        # x_dur = len(x) / sr
         off_start += 3
         off_end += 3
     print('Offset: ', offset)
@@ -185,7 +183,7 @@ def patch(filenames):
 
     # Load in high quality versions
     clean_x, clean_sr = lr.core.load(os.path.join(app.config['UPLOAD_FOLDER'], aud), sr=48000)
-    clean_orig_x, clean_orig_sr = lr.core.load(os.path.join('output', extracted_name), sr=48000)
+    clean_orig_x, _ = lr.core.load(os.path.join('output', extracted_name), sr=48000)
 
     # start_clean = int(np.round(offset / sr * clean_sr))
     # end_clean = start_clean + int(np.round(x_dur * clean_sr))
@@ -306,7 +304,6 @@ def upload_file():
                 'beginTimestamp': to_timestamp(st),
                 'endTimestamp': to_timestamp(end),
                 'corruptedPhrase': corr_text[i]
-                # 'corruptedPhrase': 'Lorem ipsum dolor sit amet'
             })
 
         dest_name = str(uuid.uuid4()) + '.mp4'

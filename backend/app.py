@@ -65,7 +65,7 @@ def find_bad(seg, sr):
 
     per_mean = np.mean(pers)
     per_dev = np.std(pers)
-    out_filt = [out[i] for i, per in enumerate(pers) if per > per_mean + 0.5 * per_dev]
+    out_filt = [out[i] for i, per in enumerate(pers) if per < per_mean + 0.5 * per_dev]
 
     out_filt.sort(reverse=True)
     secs = []
@@ -100,6 +100,7 @@ def patch_audio(original, good, offset_dur, ints, new_sr):
     for st, end in ints:
         print('Patching:', (st, end))
         # patch_len = (end - st) * new_sr
+        print('idxs:', (offset + st * new_sr, offset + end * new_sr))
         original[st * new_sr:end * new_sr] = good[offset + st * new_sr:offset + end * new_sr]
     return original
 
@@ -118,12 +119,18 @@ def patch(filenames):
     # Perform MASS
     # TODO: randomize start and end indices and do majority voting
     print('Performing MASS')
-    OFF_START = 40
-    OFF_END = 45
-    idxs = sim(recon_good, recon_x[OFF_START*sr:OFF_END*sr])
-    offset = idxs[0] - OFF_START*sr
-    offset_dur = offset / sr
-    x_dur = len(x) / sr
+    off_start = 40
+    off_end = 45
+    offset_dur = -1
+    while offset_dur < 0:
+        idxs = sim(recon_good, recon_x[off_start*sr:off_end*sr])
+        offset = idxs[0] - off_start*sr
+        offset_dur = offset / sr
+        x_dur = len(x) / sr
+        off_start += 3
+        off_end += 3
+    print('Offset: ', offset)
+    print('Offset Duration: ', offset_dur)
 
     # Find bad portions
     print('Finding bad portions')

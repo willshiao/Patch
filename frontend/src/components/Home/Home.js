@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './Home.scss';
 import { Button } from 'antd';
-import { GithubOutlined } from '@ant-design/icons';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Element } from 'react-scroll';
 import {
@@ -61,7 +60,9 @@ function Home() {
                   <RouterLink to="/upload">
                     <Button type="primary" style={{ marginRight: "16px", borderRadius: "8px" }}>Get Patchin'</Button>
                   </RouterLink>
-                  <Button ghost style={{ borderRadius: "8px", color: "#000", borderColor: "#000", borderWidth: "2px" }}>View on GitHub</Button>
+                  <a href="https://github.com/willshiao/Patch">
+                    <Button ghost style={{ borderRadius: "8px", color: "#000", borderColor: "#000", borderWidth: "2px" }}>View on GitHub</Button>
+                  </a>
                 </div>
               </div>
             </div>

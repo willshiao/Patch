@@ -125,7 +125,18 @@ function Upload() {
   }
 
   const handleVideoFileChange = e => {
-    const videoFile = e.target.files[0];
+    const { files } = e.target;
+    if (files.length > 1) {
+      addToast(NUM_FILES_ERROR, { appearance: 'error' });
+      return;
+    }
+
+    const videoFile = files[0];
+    if (!videoFileTypes.includes(videoFile.type)) {
+      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
+      return;
+    }
+
     setVideoFile(videoFile);
   }
 
@@ -134,7 +145,18 @@ function Upload() {
   }
 
   const handleAudioFileChange = e => {
+    const { files } = e.target;
+    if (files.length > 1) {
+      addToast(NUM_FILES_ERROR, { appearance: 'error' });
+      return;
+    }
+
     const audioFile = e.target.files[0];
+    if (!audioFileTypes.includes(audioFile.type)) {
+      addToast(INVALID_FILE_ERROR, { appearance: 'error' });
+      return;
+    }
+
     setAudioFile(audioFile);
   }
 

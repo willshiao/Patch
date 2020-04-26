@@ -22,6 +22,13 @@ app.secret_key = "secret key"
 
 ALLOWED_EXTENSIONS = set(['mp4', 'm4a', 'mp3'])
 
+def to_timestamp(sec):
+    hours = str(sec // 3600).rjust(2, '0')
+    left = sec % 3600
+    mins = str(left // 60).rjust(2, '0')
+    secs = str(left % 60).rjust(2, '0')
+    return f'{hours}:{mins}:{secs}'
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -165,6 +172,7 @@ def patch(filenames):
     out = ffmpeg.output(stream.video, stream2.audio, 'output/' + output_video_name)
     out.run(overwrite_output=True)
     print(f"Done patching {output_video_name}")
+    return bad_ints
 
 
 
@@ -189,9 +197,20 @@ def upload_file():
                 filename = str(uuid.uuid4()) + '.' + filesplit[1]
                 filenames.append(filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        patch(filenames)
+        bad_ints = patch(filenames)
         flash('File(s) successfully uploaded')
-        return redirect('/')
+        affectedRegions = []
+        for st, end in bad_ints:            
+            affectedRegions.append({
+                'beginTimestamp': to_timestamp(st),
+                'endTimestamp': to_timestamp(end),
+                'corruptedPhrase': 'Lorem ipsum dolor sit amet'
+            })
+
+        return {
+            'videoUrl': 'todo',
+            'affectedRegions': affectedRegions
+        }
 
 
 if __name__ == "__main__":

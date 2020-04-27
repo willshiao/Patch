@@ -1,9 +1,9 @@
 # Patch
 Developed at Citrus Hack 2020.
-* 1st Place Overall
-* 1st Place Best Use of Google Cloud Platform
-* Best Start-Up Project
-* 1517 Best Entrepreneurial Hack
+* 1st Place Overall 🏆
+* 1st Place Best Use of Google Cloud Platform ☁️
+* Best Start-Up Project 🚀
+* 1517 Best Entrepreneurial Hack 💼
 
 ## Inspiration
 With social distancing in full effect, Zoom is more prevalent than ever. However, a common problem is that not everyone has the best internet connection. While there is not much that can be done during the meeting, Patch allows a user to retroactively _patch_ the recording of the meeting.

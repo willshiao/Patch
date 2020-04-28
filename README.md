@@ -1,4 +1,9 @@
 # Patch
+
+<p align="center">
+  <img width="50%"src="./frontend/src/assets/imgs/patch_logo.svg">
+</p>
+
 Developed at Citrus Hack 2020.
 * 1st Place Overall 🏆
 * 1st Place Best Use of Google Cloud Platform ☁️

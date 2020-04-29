@@ -1,10 +1,10 @@
 # Patch
 
 <p align="center">
-  <img width="50%"src="./frontend/src/assets/imgs/patch_logo.svg">
+  <img width="40%"src="./frontend/src/assets/imgs/patch_logo.svg">
 </p>
 
-Developed at Citrus Hack 2020.
+Developed at Citrus Hack 2020, check out our Devpost link [here](https://devpost.com/software/patch-8bg6x2)!
 * 1st Place Overall 🏆
 * 1st Place Best Use of Google Cloud Platform ☁️
 * Best Start-Up Project 🚀

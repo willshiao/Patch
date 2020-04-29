@@ -1,7 +1,7 @@
 # Patch
 
 <p align="center">
-  <img width="40%"src="./frontend/src/assets/imgs/patch_logo.svg">
+  <img width="70%"src="./frontend/src/assets/imgs/patch_thumbnail.png">
 </p>
 
 Developed at Citrus Hack 2020, check out our Devpost link [here](https://devpost.com/software/patch-8bg6x2)!

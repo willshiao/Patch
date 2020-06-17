@@ -6,7 +6,9 @@ export const content = {
     },
     title: {
       caption: "The quick fix for your choppy Zoom audio.",
-      subcaption: "Posting a video with audio defects? We'll make uploading it the hardest part."
+      subcaption: "Posting a video with audio defects? We'll make uploading it the hardest part.",
+      start: "Get Patchin\'",
+      github: "View on GitHub"
     },
     about: {
       title: "About",

@@ -12,10 +12,11 @@ import {
   NavItem,
   NavLink
 } from 'reactstrap';
+import { BUTTON_BORDER_RADIUS } from '../../constants';
 import logo from '../../assets/imgs/patch_logo.svg';
 import landing from "../../assets/imgs/landing1.svg";
-import line from '../../assets/imgs/line.svg';
-import whiteLine from '../../assets/imgs/white_line.svg';
+import blueSeparator from '../../assets/imgs/line.svg';
+import whiteSeparator from '../../assets/imgs/white_line.svg';
 import about from '../../assets/imgs/landing2.png';
 import sound from '../../assets/imgs/landing_how1.svg';
 import upload from '../../assets/imgs/landing_how2.svg';
@@ -56,15 +57,15 @@ function Home() {
           <div className="row justify-content-center">
             <div className="col-4">
               <div className="Home__landingText">
-                <img className="Home__line" src={line} alt="break"/>
+                <img className="Home__line" src={blueSeparator} alt="break"/>
                 <h1 className="Home__caption">{home.title.caption}</h1>
                 <p className="Home__subcaption">{home.title.subcaption}</p>
                 <div className="Home__buttonGroup">
                   <RouterLink to="/upload">
-                    <Button type="primary" style={{ marginRight: "16px", borderRadius: "8px" }}>Get Patchin'</Button>
+                    <Button type="primary" style={{ marginRight: "16px", borderRadius: BUTTON_BORDER_RADIUS }}>{home.title.start}</Button>
                   </RouterLink>
                   <a href="https://github.com/willshiao/Patch">
-                    <Button ghost style={{ borderRadius: "8px", color: "#000", borderColor: "#000", borderWidth: "2px" }}>View on GitHub</Button>
+                    <Button ghost style={{ borderRadius: BUTTON_BORDER_RADIUS, color: "#000", borderColor: "#000", borderWidth: "2px" }}>{home.title.github}</Button>
                   </a>
                 </div>
               </div>
@@ -82,7 +83,7 @@ function Home() {
               </div>
               <div className="col-5">
                 <div className="Home__aboutText">
-                  <img className="Home__line" src={whiteLine} alt="break"/>
+                  <img className="Home__line" src={whiteSeparator} alt="break"/>
                   <h1 className="Home__aboutTitle">{home.about.title}</h1>
                   <p className="Home__aboutDescription">
                     {home.about.description}
@@ -96,7 +97,7 @@ function Home() {
           <div className="Home__how">
             <div className="row justify-content-center">
               <div className="col-6">
-                <img className="Home__line" src={line} alt="break"/>
+                <img className="Home__line" src={blueSeparator} alt="break"/>
                 <h1 className="Home__howTitle">{home.how.title}</h1>
               </div>
             </div>

@@ -5,7 +5,7 @@ import { Button, Table } from 'antd';
 import { Player, BigPlayButton } from 'video-react';
 import logo from '../../assets/imgs/patch_logo.svg';
 import successImage from '../../assets/imgs/result1.svg';
-import { tableColumns } from '../../constants';
+import { tableColumns, BUTTON_BORDER_RADIUS } from '../../constants';
 import { content } from '../../content';
 
 const { result } = content;
@@ -32,7 +32,7 @@ function Result(props) {
           <div className="col-4">
             <div className="Result__againContainer">
               <Link to="/upload">
-                <Button ghost type="primary" className="Result__againButton" style={{ borderRadius: "8px" }}>{result.again}</Button>
+                <Button ghost type="primary" className="Result__againButton" style={{ borderRadius: BUTTON_BORDER_RADIUS }}>{result.again}</Button>
               </Link>
             </div>
           </div>
@@ -59,7 +59,13 @@ function Result(props) {
               <p className="Result__subtitle">{result.success.description}</p>
               <img className="Result__image" src={successImage} alt=""/>
               <a href={videoUrl} download>
-                <Button className="Result__download" type="primary" style={{ display: "block", margin: "0 auto", borderRadius: "8px" }}>{result.success.download}</Button>
+                <Button
+                  className="Result__download"
+                  type="primary"
+                  style={{ display: "block", margin: "0 auto", borderRadius: BUTTON_BORDER_RADIUS }}
+                >
+                  {result.success.download}
+                </Button>
               </a>
             </div>
           </div>

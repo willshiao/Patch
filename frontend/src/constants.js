@@ -7,7 +7,6 @@ export const uploadStyles = {
     disabled: "#f0f3f6"
   },
 }
-
   
 export const tableColumns = [
   {
@@ -32,3 +31,5 @@ export const audioFileTypes = ["audio/x-m4a", "audio/mpeg"];
 
 export const NUM_FILES_ERROR = "Please select only 1 file.";
 export const INVALID_FILE_ERROR = "Sorry, it seems like you're trying to upload the wrong type of file!";
+export const MODAL_WIDTH = 640;
+export const BUTTON_BORDER_RADIUS = "8px";

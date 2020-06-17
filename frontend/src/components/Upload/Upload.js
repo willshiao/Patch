@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { useToasts } from 'react-toast-notifications';
 import { Button, Modal } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
-import { BASE_URL, NUM_FILES_ERROR } from '../../constants';
+import { BASE_URL, NUM_FILES_ERROR, MODAL_WIDTH, BUTTON_BORDER_RADIUS } from '../../constants';
 import axios from 'axios';
 import logo from '../../assets/imgs/patch_logo.svg';
 import videoOne from '../../assets/imgs/upload1_normal.svg';
@@ -162,8 +162,16 @@ function Upload() {
             <div className="Upload__videoBadgeContainer">
               <img className="Upload__videoBadge" src={videoFile ? check : videoOne} alt=""/>
             </div>
-            <div className="Upload__videoInfoContainer" style={videoFile ? { backgroundColor: "#eafeef" } : { backgroundColor: "#dfeeff" }}>
-              <p className="Upload__videoInfoCaption" style={videoFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}>{upload.videoCaption}</p>
+            <div
+              className="Upload__videoInfoContainer"
+              style={videoFile ? { backgroundColor: "#eafeef" } : { backgroundColor: "#dfeeff" }}
+            >
+              <p 
+                className="Upload__videoInfoCaption"
+                style={videoFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}
+              >
+                {upload.videoCaption}
+              </p>
               <p className="Upload__videoInfoSubCaption">{upload.videoFileTypes}</p>
             </div>
             <div className="Upload__videoContainer">
@@ -171,7 +179,20 @@ function Upload() {
                 videoFile ? (
                   <div className="Upload__videoSelected">
                     <p className="Upload__fileName">{videoFile.name}</p>
-                    <Button type="primary" disabled={isLoading} onClick={handleVideoFileCancel} style={{ display: "block", margin: "0 auto", border: "none", borderRadius: "8px", backgroundColor: "#FF7474" }}>Cancel</Button>
+                    <Button
+                      type="primary"
+                      disabled={isLoading}
+                      onClick={handleVideoFileCancel}
+                      style={{
+                        display: "block",
+                        margin: "0 auto",
+                        border: "none",
+                        borderRadius: BUTTON_BORDER_RADIUS,
+                        backgroundColor: "#FF7474"
+                      }}
+                    >
+                      Cancel
+                    </Button>
                   </div>
                 ) : (
                   <div className="Upload__video" {...getVideoRootProps()}>
@@ -182,8 +203,15 @@ function Upload() {
                         <div>
                           <p className="Upload__videoText">{upload.dropVideo}</p>
                           <p className="Upload__videoText--or">{upload.or}</p>
-                          <Button type="primary" className="Upload__videoBrowse" onClick={handleBrowseVideoClick} style={{ borderRadius: "8px" }}>Browse files</Button>
-                          <input type="file" id="hidden" ref={inputVideoFile} onChange={handleVideoFileChange} style={{display: 'none'}} /> 
+                          <Button
+                            type="primary"
+                            className="Upload__videoBrowse"
+                            onClick={handleBrowseVideoClick}
+                            style={{ borderRadius: BUTTON_BORDER_RADIUS }}
+                          >
+                            Browse files
+                          </Button>
+                          <input type="file" id="hidden" ref={inputVideoFile} onChange={handleVideoFileChange} style={{ display: 'none' }} /> 
                         </div>
                       )
                     }
@@ -205,7 +233,14 @@ function Upload() {
                 audioFile ? (
                   <div>
                     <p className="Upload__fileName">{audioFile.name}</p>
-                    <Button type="primary" disabled={isLoading} onClick={handleAudioFileCancel} style={{ display: "block", margin: "0 auto", border: "none", borderRadius: "8px", backgroundColor: "#FF7474" }}>Cancel</Button>
+                    <Button
+                      type="primary"
+                      disabled={isLoading}
+                      onClick={handleAudioFileCancel}
+                      style={{ display: "block", margin: "0 auto", border: "none", borderRadius: BUTTON_BORDER_RADIUS, backgroundColor: "#FF7474" }}
+                    >
+                      Cancel
+                    </Button>
                   </div>
                 ) : (
                   <div className="Upload__audio" {...getAudioRootProps()}>
@@ -216,7 +251,14 @@ function Upload() {
                         <div>
                           <p className="Upload__audioText">{upload.dropAudio}</p>
                           <p className="Upload__audioText--or">{upload.or}</p>
-                          <Button type="primary" className="Upload__audioBrowse" onClick={handleBrowseAudioClick} style={{ borderRadius: "8px" }}>Browse files</Button>
+                          <Button
+                            type="primary"
+                            className="Upload__audioBrowse"
+                            onClick={handleBrowseAudioClick}
+                            style={{ borderRadius: BUTTON_BORDER_RADIUS }}
+                          >
+                            Browse files
+                          </Button>
                           <input type="file" id="hidden" ref={inputAudioFile} onChange={handleAudioFileChange} style={{display: 'none'}} /> 
                         </div>
                       )
@@ -231,7 +273,14 @@ function Upload() {
           videoFile && audioFile && !isLoading &&
             <div className="row justify-content-center">
               <div className="col-2">
-                <Button className="Upload__button" type="primary" onClick={handleUpload} style={{ display: "block", margin: "0 auto", marginTop: "64px", borderRadius: "8px" }}>{upload.button}</Button>
+                <Button
+                  className="Upload__button"
+                  type="primary"
+                  onClick={handleUpload}
+                  style={{ display: "block", margin: "0 auto", marginTop: "64px", borderRadius: BUTTON_BORDER_RADIUS }}
+                >
+                  {upload.button}
+                </Button>
               </div>
             </div>
         }
@@ -244,7 +293,7 @@ function Upload() {
         <Modal
           visible={hasUploadError}
           onCancel={closeModal}
-          width={640}
+          width={MODAL_WIDTH}
           footer={null}
           centered
           className="Upload__modal"

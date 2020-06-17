@@ -6,6 +6,9 @@ import { Player, BigPlayButton } from 'video-react';
 import logo from '../../assets/imgs/patch_logo.svg';
 import successImage from '../../assets/imgs/result1.svg';
 import { tableColumns } from '../../constants';
+import { content } from '../../content';
+
+const { result } = content;
 
 function Result(props) {
   if (!props.location.state) {
@@ -29,7 +32,7 @@ function Result(props) {
           <div className="col-4">
             <div className="Result__againContainer">
               <Link to="/upload">
-                <Button ghost type="primary" className="Result__againButton" style={{ borderRadius: "8px" }}>Patch again</Button>
+                <Button ghost type="primary" className="Result__againButton" style={{ borderRadius: "8px" }}>{result.again}</Button>
               </Link>
             </div>
           </div>
@@ -42,7 +45,7 @@ function Result(props) {
             >
               <BigPlayButton position="center" />
             </Player>
-            <h4 className="Result__tableTitle">{numAffectedRegions} patched regions</h4>
+            <h4 className="Result__tableTitle">{numAffectedRegions} {result.regions}</h4>
             <Table
               className="Result__table"
               columns={tableColumns}
@@ -52,11 +55,11 @@ function Result(props) {
           </div>
           <div className="col-4">
             <div className="Result__messageContainer">
-              <h3 className="Result__title">Patch Successful!</h3>
-              <p className="Result__subtitle">We were able to patch-up your video. Check it out and download it once you're ready!</p>
+              <h3 className="Result__title">{result.success.title}</h3>
+              <p className="Result__subtitle">{result.success.description}</p>
               <img className="Result__image" src={successImage} alt=""/>
               <a href={videoUrl} download>
-                <Button className="Result__download" type="primary" style={{ display: "block", margin: "0 auto", borderRadius: "8px" }}>Download video</Button>
+                <Button className="Result__download" type="primary" style={{ display: "block", margin: "0 auto", borderRadius: "8px" }}>{result.success.download}</Button>
               </a>
             </div>
           </div>

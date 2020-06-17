@@ -14,6 +14,9 @@ import check from '../../assets/imgs/upload1_done.svg';
 import audioOne from '../../assets/imgs/upload2_normal.svg';
 import errorImage from '../../assets/imgs/upload_error.svg';
 import bars from '../../assets/imgs/bars.svg';
+import { content } from '../../content';
+
+const { upload } = content;
 
 function Upload() {
   // States
@@ -159,12 +162,8 @@ function Upload() {
               <img className="Upload__videoBadge" src={videoFile ? check : videoOne} alt=""/>
             </div>
             <div className="Upload__videoInfoContainer" style={videoFile ? { backgroundColor: "#eafeef" } : { backgroundColor: "#dfeeff" }}>
-              <p className="Upload__videoInfoCaption" style={videoFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}>
-                Upload your video file with “bad” audio.
-              </p>
-              <p className="Upload__videoInfoSubCaption">
-                Acceptable file types: .mp4, .mov
-              </p>
+              <p className="Upload__videoInfoCaption" style={videoFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}>{upload.videoCaption}</p>
+              <p className="Upload__videoInfoSubCaption">{upload.videoFileTypes}</p>
             </div>
             <div className="Upload__videoContainer">
               {
@@ -177,11 +176,11 @@ function Upload() {
                   <div className="Upload__video" {...getVideoRootProps()}>
                     {
                       isVideoDragActive ? (
-                        <p className="Upload__drop">Drop the file here</p>
+                        <p className="Upload__drop">{upload.drop}</p>
                       ) : (
                         <div>
-                          <p className="Upload__videoText">Drag ‘n’ drop your video file here</p>
-                          <p className="Upload__videoText--or">or</p>
+                          <p className="Upload__videoText">{upload.dropVideo}</p>
+                          <p className="Upload__videoText--or">{upload.or}</p>
                           <Button type="primary" className="Upload__videoBrowse" onClick={handleBrowseVideoClick} style={{ borderRadius: "8px" }}>Browse files</Button>
                           <input type="file" id="hidden" ref={inputVideoFile} onChange={handleVideoFileChange} style={{display: 'none'}} /> 
                         </div>
@@ -197,12 +196,8 @@ function Upload() {
               <img className="Upload__audioBadge" src={audioFile ? check : audioOne} alt=""/>
             </div>
             <div className="Upload__audioInfoContainer" style={audioFile ? { backgroundColor: "#eafeef" } : { backgroundColor: "#dfeeff" }}>
-              <p className="Upload__audioInfoCaption" style={audioFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}>
-                Upload your “completely fine” audio file.
-              </p>
-              <p className="Upload__audioInfoSubCaption">
-                Acceptable file types: .mp3, .m4a
-              </p>
+              <p className="Upload__audioInfoCaption" style={audioFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}>{upload.audioCaption}</p>
+              <p className="Upload__audioInfoSubCaption">{upload.audioFileTypes}</p>
             </div>
             <div className="Upload__audioContainer">
             {
@@ -215,11 +210,11 @@ function Upload() {
                   <div className="Upload__audio" {...getAudioRootProps()}>
                     {
                       isAudioDragActive ? (
-                        <p className="Upload__drop">Drop the file here!</p>
+                        <p className="Upload__drop">{upload.drop}</p>
                       ) : (
                         <div>
-                          <p className="Upload__audioText">Drag ‘n’ drop your audio file here</p>
-                          <p className="Upload__audioText--or">or</p>
+                          <p className="Upload__audioText">{upload.dropAudio}</p>
+                          <p className="Upload__audioText--or">{upload.or}</p>
                           <Button type="primary" className="Upload__audioBrowse" onClick={handleBrowseAudioClick} style={{ borderRadius: "8px" }}>Browse files</Button>
                           <input type="file" id="hidden" ref={inputAudioFile} onChange={handleAudioFileChange} style={{display: 'none'}} /> 
                         </div>
@@ -235,7 +230,7 @@ function Upload() {
           videoFile && audioFile && !isLoading &&
             <div className="row justify-content-center">
               <div className="col-2">
-                <Button className="Upload__button" type="primary" onClick={handleUpload} style={{ display: "block", margin: "0 auto", marginTop: "64px", borderRadius: "8px" }}>Upload</Button>
+                <Button className="Upload__button" type="primary" onClick={handleUpload} style={{ display: "block", margin: "0 auto", marginTop: "64px", borderRadius: "8px" }}>{upload.button}</Button>
               </div>
             </div>
         }
@@ -254,13 +249,13 @@ function Upload() {
           className="Upload__modal"
         >
           <img className="Upload__errorImage" src={errorImage} alt=""/>
-          <h1 className="Upload__errorTitle">UH-OH!</h1>
-          <p className="Upload__errorMessage">There was an error uploading your files! This could be because of one of the following reasons:</p>
+          <h1 className="Upload__errorTitle">{upload.error.title}</h1>
+          <p className="Upload__errorMessage">{upload.error.mainMessage}</p>
           <ul className="Upload__errorList">
-            <li className="Upload__errorListItem">The video/audio file is not valid.</li>
-            <li className="Upload__errorListItem">The audio file is shorter than the Zoom recording.</li>
-            <li className="Upload__errorListItem">The audio file is for a different meeting than the video file.</li>
-            <li className="Upload__errorListItem">Our server is currently overloaded and the request timed out (unfortunately, a lot of processing power is required).</li>
+            <li className="Upload__errorListItem">{upload.error.invalidFile}</li>
+            <li className="Upload__errorListItem">{upload.error.audioShort}</li>
+            <li className="Upload__errorListItem">{upload.error.audioDifferent}</li>
+            <li className="Upload__errorListItem">{upload.error.timeout}</li>
           </ul>
         </Modal>
       </div>

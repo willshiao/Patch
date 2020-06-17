@@ -4,9 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { useToasts } from 'react-toast-notifications';
 import { Button, Modal } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
-import { BASE_URL, NUM_FILES_ERROR, INVALID_FILE_ERROR, videoFileTypes, audioFileTypes } from '../../constants';
-import { mockData } from '../../mocks';
-import Fade from 'react-reveal/Fade';
+import { BASE_URL, NUM_FILES_ERROR } from '../../constants';
 import axios from 'axios';
 import logo from '../../assets/imgs/patch_logo.svg';
 import videoOne from '../../assets/imgs/upload1_normal.svg';
@@ -42,7 +40,9 @@ function Upload() {
 
     const videoFile = acceptedFiles[0];
     setVideoFile(videoFile);
-  }, []);
+  }, [addToast]);
+
+  // Target video drop zone
   const {
     getRootProps: getVideoRootProps,
     isDragActive: isVideoDragActive
@@ -57,7 +57,9 @@ function Upload() {
     
     const audioFile = acceptedFiles[0];
     setAudioFile(audioFile);
-  }, []);
+  }, [addToast]);
+
+  // Target audio drop zone
   const {
     getRootProps: getAudioRootProps,
     isDragActive: isAudioDragActive
@@ -82,7 +84,6 @@ function Upload() {
       }
     })
       .then(response => {
-        console.log("I got a response from backend: ", response);
         const { data } = response;
         setData(data);
         setIsLoading(false);
@@ -90,17 +91,7 @@ function Upload() {
       .catch(error => {
         setHasUploadError(true);
         setIsLoading(false);
-        console.log("ERRORRRRRRR", error);
-      })
-  }
-
-  if (data) {
-    return (
-      <Redirect push to={{
-        pathname: '/result',
-        state: { data }
-      }}/>
-    );
+      });
   }
   
   const handleVideoFileCancel = e => {
@@ -144,6 +135,16 @@ function Upload() {
   }
 
   const closeModal = () => setHasUploadError(false);
+
+  // Go to Result once we receive data 
+  if (data) {
+    return (
+      <Redirect push to={{
+        pathname: '/result',
+        state: { data }
+      }}/>
+    );
+  }
 
   return (
     <div className="Upload">

@@ -12,7 +12,7 @@ import {
   NavItem,
   NavLink
 } from 'reactstrap';
-import { BUTTON_BORDER_RADIUS } from '../../constants';
+import { BUTTON_BORDER_RADIUS, BLACK_COLOR, OUTLINE_WIDTH } from '../../constants';
 import logo from '../../assets/imgs/patch_logo.svg';
 import landing from "../../assets/imgs/landing1.svg";
 import blueSeparator from '../../assets/imgs/line.svg';
@@ -65,7 +65,17 @@ function Home() {
                     <Button type="primary" style={{ marginRight: "16px", borderRadius: BUTTON_BORDER_RADIUS }}>{home.title.start}</Button>
                   </RouterLink>
                   <a href="https://github.com/willshiao/Patch">
-                    <Button ghost style={{ borderRadius: BUTTON_BORDER_RADIUS, color: "#000", borderColor: "#000", borderWidth: "2px" }}>{home.title.github}</Button>
+                    <Button
+                      ghost
+                      style={{
+                        borderRadius: BUTTON_BORDER_RADIUS,
+                        color: BLACK_COLOR,
+                        borderColor: BLACK_COLOR,
+                        borderWidth: OUTLINE_WIDTH
+                      }}
+                    >
+                      {home.title.github}
+                    </Button>
                   </a>
                 </div>
               </div>

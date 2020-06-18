@@ -4,7 +4,6 @@ import { useDropzone } from 'react-dropzone';
 import { useToasts } from 'react-toast-notifications';
 import { Button, Modal } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
-import { BASE_URL, NUM_FILES_ERROR, MODAL_WIDTH, BUTTON_BORDER_RADIUS } from '../../constants';
 import axios from 'axios';
 import logo from '../../assets/imgs/patch_logo.svg';
 import videoOne from '../../assets/imgs/upload1_normal.svg';
@@ -13,6 +12,17 @@ import audioOne from '../../assets/imgs/upload2_normal.svg';
 import errorImage from '../../assets/imgs/upload_error.svg';
 import bars from '../../assets/imgs/bars.svg';
 import { content } from '../../content';
+import {
+  BASE_URL,
+  NUM_FILES_ERROR,
+  MODAL_WIDTH,
+  BUTTON_BORDER_RADIUS,
+  PRIMARY_COLOR,
+  SUCCESS_COLOR,
+  LIGHT_PRIMARY_COLOR,
+  LIGHT_SUCCESS_COLOR,
+  WARNING_COLOR
+} from '../../constants';
 
 const { upload } = content;
 
@@ -164,11 +174,11 @@ function Upload() {
             </div>
             <div
               className="Upload__videoInfoContainer"
-              style={videoFile ? { backgroundColor: "#eafeef" } : { backgroundColor: "#dfeeff" }}
+              style={videoFile ? { backgroundColor: LIGHT_SUCCESS_COLOR } : { backgroundColor: LIGHT_PRIMARY_COLOR }}
             >
               <p 
                 className="Upload__videoInfoCaption"
-                style={videoFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}
+                style={videoFile ? { color: SUCCESS_COLOR } : { color: PRIMARY_COLOR }}
               >
                 {upload.videoCaption}
               </p>
@@ -188,7 +198,7 @@ function Upload() {
                         margin: "0 auto",
                         border: "none",
                         borderRadius: BUTTON_BORDER_RADIUS,
-                        backgroundColor: "#FF7474"
+                        backgroundColor: WARNING_COLOR
                       }}
                     >
                       Cancel
@@ -224,8 +234,8 @@ function Upload() {
             <div className="Upload__audioBadgeContainer">
               <img className="Upload__audioBadge" src={audioFile ? check : audioOne} alt=""/>
             </div>
-            <div className="Upload__audioInfoContainer" style={audioFile ? { backgroundColor: "#eafeef" } : { backgroundColor: "#dfeeff" }}>
-              <p className="Upload__audioInfoCaption" style={audioFile ? { color: "#72CF97" } : { color: "#2D8CFF" }}>{upload.audioCaption}</p>
+            <div className="Upload__audioInfoContainer" style={audioFile ? { backgroundColor: LIGHT_SUCCESS_COLOR } : { backgroundColor: LIGHT_PRIMARY_COLOR }}>
+              <p className="Upload__audioInfoCaption" style={audioFile ? { color: SUCCESS_COLOR } : { color: PRIMARY_COLOR }}>{upload.audioCaption}</p>
               <p className="Upload__audioInfoSubCaption">{upload.audioFileTypes}</p>
             </div>
             <div className="Upload__audioContainer">
@@ -237,7 +247,13 @@ function Upload() {
                       type="primary"
                       disabled={isLoading}
                       onClick={handleAudioFileCancel}
-                      style={{ display: "block", margin: "0 auto", border: "none", borderRadius: BUTTON_BORDER_RADIUS, backgroundColor: "#FF7474" }}
+                      style={{
+                        display: "block",
+                        margin: "0 auto",
+                        border: "none",
+                        borderRadius: BUTTON_BORDER_RADIUS,
+                        backgroundColor: WARNING_COLOR
+                      }}
                     >
                       Cancel
                     </Button>
@@ -259,7 +275,7 @@ function Upload() {
                           >
                             Browse files
                           </Button>
-                          <input type="file" id="hidden" ref={inputAudioFile} onChange={handleAudioFileChange} style={{display: 'none'}} /> 
+                          <input type="file" id="hidden" ref={inputAudioFile} onChange={handleAudioFileChange} style={{ display: 'none' }} /> 
                         </div>
                       )
                     }

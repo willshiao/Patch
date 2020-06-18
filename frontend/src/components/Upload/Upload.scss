@@ -75,7 +75,7 @@
   text-align: center;
   padding-left: 64px;
   padding-right: 64px;
-  background-color: #f0f3f6;
+  background-color: $secondary-light-color;
   padding-top: 64px;
   padding-bottom: 96px;
 }
@@ -138,17 +138,19 @@
   margin: 0 auto;
 }
 
+.Upload__errorTitle, .Upload__errorMessage, .Upload__errorList {
+  font-family: "Product Sans";
+}
+
 .Upload__errorTitle {
   margin-top: 16px;
   font-weight: bold;
-  font-family: "Product Sans";
   text-align: center;
 }
 
 .Upload__errorMessage {
   padding-left: 64px;
   padding-right: 64px;
-  font-family: "Product Sans";
   font-size: 16px;
   font-weight: bold;
 }
@@ -156,6 +158,5 @@
 .Upload__errorList {
   padding-left: 96px;
   padding-right: 64px;
-  font-family: "Product Sans";
   font-size: 16px;
 }

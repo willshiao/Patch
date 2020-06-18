@@ -1,9 +1,5 @@
 @import '../../variables.scss';
 
-// .Home__navbar {
-//   margin-bottom: 32px;
-// }
-
 .Home__navbarLogo {
   width: 15%;
 }
@@ -65,7 +61,7 @@
 }
 
 .Home__about {
-  background-color: #2D8CFF;
+  background-color: $primary-color;
   width: 100%;
   padding-top: 32px;
   padding-bottom: 64px;

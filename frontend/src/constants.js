@@ -1,4 +1,4 @@
-export const BASE_URL = "https://patch-api.wls.ai";
+export const BASE_URL = "https://localhost:5000";
 
 export const uploadStyles = {
   backgroundColor: {

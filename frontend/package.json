@@ -14,7 +14,7 @@
     "halogen": "^0.2.0",
     "less": "^3.11.1",
     "less-loader": "^6.0.0",
-    "node-sass": "^4.14.0",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.13.1",
